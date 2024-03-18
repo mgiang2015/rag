@@ -4,4 +4,5 @@ This project aims to serve as a learning playground for me to experiment with La
 
 ## Tech Stack
 Backend: Python
+
 Vectorstore: Pinecone
