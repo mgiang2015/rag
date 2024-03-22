@@ -22,15 +22,10 @@ async def redirect_root_to_docs():
 # Route to ingest our resume / project files
 @app.post("/rag-pinecone/files/")
 async def ingest_file(
-        file: bytes = File(...),
+        file: UploadFile,
 ):
-    parser = PDFMinerParser()
-    blob = Blob.from_data (
-        data=file,
-        mime_type="application/pdf",
-    )
-
-    pages = parser.parse(blob=blob)
+    loader = PyPDFLoader(file.filename)
+    pages = loader.load_and_split()
 
     all_splits = []
     text_splitter = RecursiveCharacterTextSplitter(chunk_size=500, chunk_overlap=0)
