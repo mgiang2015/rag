@@ -8,3 +8,6 @@ langchain_text_splitters==0.0.1
 langserve==0.0.51
 python-dotenv==1.0.1
 uvicorn==0.29.0
+langchain-cli
+packages/rag-pinecone
+beautifulsoup4
