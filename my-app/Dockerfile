@@ -6,11 +6,21 @@ RUN poetry config virtualenvs.create false
 
 WORKDIR /code
 
+# Copy dependencies
+
+COPY ./.env ./.env
+
 COPY ./pyproject.toml ./README.md ./poetry.lock* ./
 
 COPY ./package[s] ./packages
 
+COPY ./requirements.txt /code/requirements.txt
+
+# Install dependencies
+
 RUN poetry install  --no-interaction --no-ansi --no-root
+
+RUN pip install --no-cache-dir --upgrade -r /code/requirements.txt
 
 COPY ./app ./app
 
