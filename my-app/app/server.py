@@ -2,13 +2,13 @@ from fastapi import FastAPI
 from fastapi.responses import RedirectResponse
 from langserve import add_routes
 from rag_pinecone import chain as rag_pinecone_chain
+from fastapi.middleware.cors import CORSMiddleware
 from dotenv import load_dotenv
 
 load_dotenv()  # take environment variables from .env.
 
 
 app = FastAPI()
-
 
 @app.get("/")
 async def redirect_root_to_docs():
@@ -61,6 +61,12 @@ async def ingest_website(url: str, status_code=200):
 # Edit this to add the chain you want to add
 # add_routes(app, NotImplemented)
 add_routes(app, rag_pinecone_chain, path="/rag-pinecone")
+
+
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["*"],
+)
 
 
 if __name__ == "__main__":
