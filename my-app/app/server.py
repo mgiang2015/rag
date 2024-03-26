@@ -1,5 +1,5 @@
-from fastapi import FastAPI, Request
-from fastapi.responses import RedirectResponse, StreamingResponse
+from fastapi import FastAPI
+from fastapi.responses import RedirectResponse
 from langserve import add_routes
 from rag_pinecone import chain as rag_pinecone_chain
 from starlette.middleware.cors import CORSMiddleware
@@ -62,11 +62,13 @@ async def ingest_website(url: str, status_code=200):
 # add_routes(app, NotImplemented)
 add_routes(app, rag_pinecone_chain, path="/rag-pinecone")
 
-origins = [
-    "http://localhost",
-    "http://localhost:3000",
-    "http://localhost:8080",
-]
+# origins = [
+#     "http://localhost",
+#     "http://localhost:3000",
+#     "http://localhost:8080",
+# ]
+
+origins = ["*"]
 
 
 app.add_middleware(
@@ -75,7 +77,6 @@ app.add_middleware(
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
-    # allow_headers=["Authorization", "Content-Type"],
 )
 
 
