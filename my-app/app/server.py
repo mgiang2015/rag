@@ -10,6 +10,7 @@ load_dotenv()  # take environment variables from .env.
 
 app = FastAPI(redirect_slashes=False)
 
+#################### API
 @app.get("")
 async def redirect_root_to_docs():
     return RedirectResponse("/docs")
@@ -64,37 +65,48 @@ add_routes(app, rag_pinecone_chain, path="/rag-pinecone")
 
 #################### Middleware to handle communication
 
-# Salt to your taste
-ALLOWED_ORIGINS = '*'    # or 'foo.com', etc.
+origins = ["http://localhost:3000",
+           "https://mgiang2015.github.io"]
+
+methods = ["POST", "GET", "OPTIONS", "PUT", "DELETE", "HEAD", "TRACE"]
+
+headers = ["Authorization", "Content-Type", "content-type"]
+
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=origins,
+    allow_credentials=True,
+    allow_methods=methods,
+    allow_headers=headers,
+)
+
+# ALLOWED_ORIGINS = "*"
 
 # handle CORS preflight requests
-@app.options('/{rest_of_path:path}')
-async def preflight_handler(request: Request, rest_of_path: str) -> Response:
+@app.options("/{full_path:path}")
+async def preflight_handler(request: Request, full_path: str) -> Response:
     response = Response()
-    response.headers['Access-Control-Allow-Origin'] = ALLOWED_ORIGINS
-    response.headers['Access-Control-Allow-Methods'] = 'POST, GET, DELETE, OPTIONS'
-    response.headers['Access-Control-Allow-Headers'] = 'Authorization, Content-Type'
+    if ("Origin" in request.headers):
+        response.headers['Access-Control-Allow-Origin'] = str(request.headers["Origin"])
+    else:
+        response.headers['Access-Control-Allow-Origin'] = "*"
+    
+    response.headers['Access-Control-Allow-Methods'] = 'POST, GET, DELETE, OPTIONS, HEAD, TRACE'
+    response.headers['Access-Control-Allow-Headers'] = 'Authorization, Content-Type, content-type'
     return response
 
 # set CORS headers
 @app.middleware("http")
 async def add_CORS_header(request: Request, call_next):
     response = await call_next(request)
-    response.headers['Access-Control-Allow-Origin'] = ALLOWED_ORIGINS
-    response.headers['Access-Control-Allow-Methods'] = 'POST, GET, DELETE, OPTIONS'
-    response.headers['Access-Control-Allow-Headers'] = 'Authorization, Content-Type'
+    if ("Origin" in request.headers):
+        response.headers['Access-Control-Allow-Origin'] = str(request.headers["Origin"])
+    else:
+        response.headers['Access-Control-Allow-Origin'] = "*"
+    
+    response.headers['Access-Control-Allow-Methods'] = 'POST, GET, DELETE, OPTIONS, HEAD, TRACE'
+    response.headers['Access-Control-Allow-Headers'] = 'Authorization, Content-Type, content-type'
     return response
-
-origins = ["*"]
-
-
-app.add_middleware(
-    CORSMiddleware,
-    allow_origins=origins,
-    allow_credentials=True,
-    allow_methods=["*"],
-    allow_headers=["*"],
-)
 
 
 if __name__ == "__main__":
