@@ -3,7 +3,7 @@
 With more widespread use of Large Language Models (LLMs), the risks of hallucination becomes significant. One approach to minimise hallucination is using [Retrieval-Augmented Generation](https://aws.amazon.com/what-is/retrieval-augmented-generation/) technique, where the LLM knowledge is bounded in a given context. Context comes from ingesting material (websites, documents, text, ...), creating embeddings and storing them in a vector database.
 
 ## Demo
-<iframe width="560" height="315" src="https://www.youtube.com/embed/liBhf8EDQKs" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+<a href="http://www.youtube.com/watch?feature=player_embedded&v=liBhf8EDQKs" target="_blank"><img src="http://img.youtube.com/vi/liBhf8EDQKs/0.jpg" alt="Demo video on Youtube" width="480" height="360" border="10" /></a>
 
 ## Tech Stack
 Backend: [Python](https://www.python.org/)
