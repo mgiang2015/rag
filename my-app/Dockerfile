@@ -29,3 +29,7 @@ RUN poetry install --no-interaction --no-ansi
 EXPOSE 8080
 
 CMD exec uvicorn app.server:app --host 0.0.0.0 --port 8080
+
+# docker build -t rag-pinecone .
+# docker tag rag-pinecone mgiang2015/rag-pinecone
+# docker push mgiang2015/rag-pinecone
