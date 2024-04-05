@@ -65,7 +65,7 @@ add_routes(app, rag_pinecone_chain, path="/rag-pinecone")
 
 #################### Middleware to handle communication
 
-# handle CORS preflight requests
+# # handle CORS preflight requests
 @app.options("/{full_path:path}")
 async def preflight_handler(request: Request, full_path: str) -> Response:
     print("Handling preflight request")
@@ -75,36 +75,26 @@ async def preflight_handler(request: Request, full_path: str) -> Response:
     else:
         response.headers['Access-Control-Allow-Origin'] = "*"
     
-    response.headers['Access-Control-Max-Age'] = 1728000
+    response.headers['Access-Control-Max-Age'] = '1728000'
     response.headers['Access-Control-Allow-Methods'] = 'GET,POST,OPTIONS,PUT,DELETE,PATCH'
     response.headers['Access-Control-Allow-Headers'] = 'Authorization,Accept,Origin,DNT,X-CustomHeader,Keep-Alive,User-Agent,X-Requested-With,If-Modified-Since,Cache-Control,Content-Type,Content-Range,Range'
     response.headers['Content-Type'] = 'application/json'
-    response.headers['Content-Length'] = 0
+    response.headers['Content-Length'] = '0'
 
     return response
 
-# set CORS headers
-@app.middleware("http")
-async def add_CORS_header(request: Request, call_next):
-    response = await call_next(request)
-    print("Adding CORS headers")
-    if ("Origin" in request.headers):
-        response.headers['Access-Control-Allow-Origin'] = str(request.headers["Origin"])
-    else:
-        response.headers['Access-Control-Allow-Origin'] = "*"
-    
-    response.headers['Access-Control-Allow-Methods'] = 'GET,POST,OPTIONS,PUT,DELETE,PATCH'
-    response.headers['Access-Control-Allow-Headers'] = 'Authorization,Accept,Origin,DNT,X-CustomHeader,Keep-Alive,User-Agent,X-Requested-With,If-Modified-Since,Cache-Control,Content-Type,Content-Range,Range'
-    return response
 
+# origins = ["http://localhost:3000",
+#            "https://mgiang2015.github.io"]
 
-origins = ["http://localhost:3000",
-           "https://mgiang2015.github.io"]
+# methods = ["POST", "GET", "OPTIONS", "PUT", "DELETE", "PATCH"]
 
-methods = ["POST", "GET", "OPTIONS", "PUT", "DELETE", "PATCH"]
+# headers = ["Authorization","Accept","Origin","DNT","X-CustomHeader","Keep-Alive","User-Agent",
+#            "X-Requested-With","If-Modified-Since","Cache-Control","Content-Type","Content-Range","Range"]
 
-headers = ["Authorization","Accept","Origin","DNT","X-CustomHeader","Keep-Alive","User-Agent",
-           "X-Requested-With","If-Modified-Since","Cache-Control","Content-Type","Content-Range","Range"]
+origins = ["*"]
+methods = ["*"]
+headers = ["*"]
 
 app.add_middleware(
     CORSMiddleware,
